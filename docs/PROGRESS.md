@@ -4,20 +4,20 @@ Living status of the Kanban backlog (`KANBAN.md`). Check the box when a ticket i
 (AC met + tests green + committed). Add a dated one-line note for anything learned or any
 follow-up ticket discovered. Update this in the same change that completes a ticket.
 
-_Last updated: 2026-07-01_ — B3 done: full Python consumer (prefetch=1, ack-after-success, app-level retry/DLQ topology), consumer task started in lifespan, 17 new unit tests all green (23 total).
+_Last updated: 2026-07-01_ — B1-B3 done: full messaging layer end-to-end. Queue topology, TaskPublisher, ResultListener (idempotent), DlqListener, Python prefetch=1 consumer with app-level retry/DLQ topology. 61 Java tests + 23 Python tests all green.
 
 ## Sprint 1 — Walking skeleton (async extraction end-to-end)
 - [x] A1 · Docker Compose infra
 - [x] A2 · Spring Boot skeleton + health
 - [x] A3 · FastAPI worker skeleton + health + pre-warm
 - [x] A4 · Postgres schema + migrations
-- [~] B1 · Queue topology
-- [ ] B2 · Java publisher + result listener (idempotent)
+- [x] B1 · Queue topology
+- [x] B2 · Java publisher + result listener (idempotent)
 - [x] B3 · Python consumer + retry/DLQ
-- [ ] C1 · Extraction (text → COPE)
+- [~] C1 · Extraction (text → COPE)
 
 ## Sprint 2 — Decision core (real perils + a scored decision)
-- [ ] D1 · Nominatim geocoding
+- [~] D1 · Nominatim geocoding
 - [ ] D2 · FEMA flood + USGS seismic
 - [ ] D3 · Mocked hurricane + wildfire
 - [ ] E1 · Deterministic scoring engine
@@ -46,3 +46,4 @@ _Last updated: 2026-07-01_ — B3 done: full Python consumer (prefetch=1, ack-af
 ## Notes / learnings
 - 2026-07-01 A3: Added pytest test suite (tests/test_health.py + tests/test_llm_adapter.py) + requirements-test.txt; all 6 tests green. FastAPI lifespan replaces deprecated @app.on_event.
 - 2026-07-01 B3: Full consumer implemented: prefetch=1, ack-after-success, retryCount < MAX -> uw.retry (TTL), retryCount >= MAX -> FAILURE result + uw.dlx. Consumer task started in FastAPI lifespan. 17 new unit tests; 23 total green.
+- 2026-07-01 B2: TaskMessage/ResultMessage DTOs, Jackson2JsonMessageConverter wired in MessagingConfig, TaskPublisher (text/vision/narrative routing), ResultListener (@Transactional, idempotency guard via task_results), DlqListener (NARRATIVE->applyNarrativeFallback, EXTRACT/VISION->markFailed FAILED_AI), EventLogger (swallows all exceptions). OrchestrationService + SubmissionService declared as stub interfaces for later epics. CopilotApplicationTests updated to use @AutoConfigureTestDatabase(Replace.ANY) + MockBean interfaces. 61 tests green.
