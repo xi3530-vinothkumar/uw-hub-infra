@@ -1,0 +1,21 @@
+# secrets / local
+CLAUDE.local.md
+.env
+*.env
+*.env.local
+# build
+target/
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.venv/
+# data
+/data/photos/*
+!/data/photos/.gitkeep
+# OS
+.DS_Store
+# sub-repo roots excluded from hub repo
+backend/
+ai-worker/
+frontend/

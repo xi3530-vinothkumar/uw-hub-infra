@@ -1,0 +1,52 @@
+# A1 — local infra: Postgres + RabbitMQ (+ optional MinIO).
+# Services (backend / ai-worker / frontend) run on the host during dev; see
+# .claude/skills/run-local-stack/SKILL.md. Bring infra up with: docker compose up -d
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: uw-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-uwcopilot}
+      POSTGRES_USER: ${POSTGRES_USER:-uw}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-uwpass}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-uw} -d ${POSTGRES_DB:-uwcopilot}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: uw-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-uw}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-uwpass}
+    ports:
+      - "5672:5672"     # AMQP
+      - "15672:15672"   # management UI  (http://localhost:15672)
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
+  # Optional object storage for photos (production path). Uncomment to enable.
+  # minio:
+  #   image: minio/minio
+  #   container_name: uw-minio
+  #   command: server /data --console-address ":9001"
+  #   environment:
+  #     MINIO_ROOT_USER: ${MINIO_USER:-uw}
+  #     MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-uwpassminio}
+  #   ports: ["9000:9000", "9001:9001"]
+  #   volumes: ["miniodata:/data"]
+
+volumes:
+  pgdata:
+  # miniodata:
