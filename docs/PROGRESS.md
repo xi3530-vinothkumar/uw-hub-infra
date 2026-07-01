@@ -4,7 +4,7 @@ Living status of the Kanban backlog (`KANBAN.md`). Check the box when a ticket i
 (AC met + tests green + committed). Add a dated one-line note for anything learned or any
 follow-up ticket discovered. Update this in the same change that completes a ticket.
 
-_Last updated: 2026-07-01_ — E1+E2 done: deterministic RulesEngine, all 3 worked examples pass (Accept/Refer/Decline), all gates implemented. C1 in progress.
+_Last updated: 2026-07-01_ — C1 done: COPE extraction handler, prompts, complete_json mode, fence-stripping, Java COPE profile persistence, EXTRACTED transition, narrative fallback. F1 in progress.
 
 ## Sprint 1 — Walking skeleton (async extraction end-to-end)
 - [x] A1 · Docker Compose infra
@@ -14,7 +14,7 @@ _Last updated: 2026-07-01_ — E1+E2 done: deterministic RulesEngine, all 3 work
 - [x] B1 · Queue topology
 - [x] B2 · Java publisher + result listener (idempotent)
 - [x] B3 · Python consumer + retry/DLQ
-- [~] C1 · Extraction (text → COPE)
+- [x] C1 · Extraction (text → COPE)
 
 ## Sprint 2 — Decision core (real perils + a scored decision)
 - [x] D1 · Nominatim geocoding
@@ -26,7 +26,7 @@ _Last updated: 2026-07-01_ — E1+E2 done: deterministic RulesEngine, all 3 work
 - [ ] C2 · Vision analysis
 
 ## Sprint 3 — Orchestration + API
-- [ ] F1 · State machine + multi-photo join
+- [~] F1 · State machine + multi-photo join
 - [ ] F2 · /evaluate express path
 - [ ] F3 · Activity-based watchdog
 - [ ] F4 · Event logging across pipeline
