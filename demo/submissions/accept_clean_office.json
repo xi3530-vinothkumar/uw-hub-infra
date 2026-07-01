@@ -1,0 +1,6 @@
+{
+  "rawText": "Commercial office building at 123 Main St, Austin TX 78701. 12-story steel frame, fire-resistive construction. Built 2016. Total insured value: $8,500,000. Fully sprinklered NFPA-13 system. Central station monitoring. New roof installed 2021. Professional services occupancy (law firm). No manufacturing or hazardous materials on site.",
+  "expressPath": false,
+  "expectedBand": "Accept",
+  "notes": "Clean modern office: low construction risk, excellent protection, low occupancy hazard"
+}

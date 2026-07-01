@@ -1,0 +1,6 @@
+{
+  "rawText": "Coastal frame restaurant at 789 Beach Blvd, Miami FL 33139. Two-story wood frame construction built 1969. Total insured value: $3,200,000. No sprinklers. Local fire alarm only. Roof 22 years old showing wear. Full-service restaurant with commercial kitchen, grease fryers. Located in FEMA Zone AE flood area, near hurricane coast.",
+  "expressPath": true,
+  "expectedBand": "Decline",
+  "notes": "High-risk: old frame construction + restaurant + coastal flood + hurricane exposure"
+}
