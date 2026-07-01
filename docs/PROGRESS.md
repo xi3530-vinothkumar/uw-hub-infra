@@ -4,7 +4,7 @@ Living status of the Kanban backlog (`KANBAN.md`). Check the box when a ticket i
 (AC met + tests green + committed). Add a dated one-line note for anything learned or any
 follow-up ticket discovered. Update this in the same change that completes a ticket.
 
-_Last updated: 2026-07-01_ — C2+C3 done: vision handler + narrative with template fallback. H1 in-progress (frontend intake + stepper).
+_Last updated: 2026-07-01_ — H1–H4 done: full React frontend (intake stepper, COPE review, risk dossier, event timeline + approve/export). I1 in-progress (synthetic submissions).
 
 ## Sprint 1 — Walking skeleton (async extraction end-to-end)
 - [x] A1 · Docker Compose infra
@@ -36,11 +36,11 @@ _Last updated: 2026-07-01_ — C2+C3 done: vision handler + narrative with templ
 - [x] C3 · Narrative generation
 
 ## Sprint 4 — Frontend + demo
-- [~] H1 · Intake + stepper
-- [ ] H2 · COPE review screen
-- [ ] H3 · Photos, peril cards, risk dossier
-- [ ] H4 · Event timeline + approve/export controls
-- [ ] I1 · Synthetic submissions
+- [x] H1 · Intake + stepper
+- [x] H2 · COPE review screen
+- [x] H3 · Photos, peril cards, risk dossier
+- [x] H4 · Event timeline + approve/export controls
+- [~] I1 · Synthetic submissions
 - [ ] I2 · Seed script + demo runbook
 
 ## Notes / learnings
