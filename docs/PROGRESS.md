@@ -8,9 +8,9 @@ _Last updated: 2026-07-01_ — A3 done: real /health (Ollama reachability + per-
 
 ## Sprint 1 — Walking skeleton (async extraction end-to-end)
 - [x] A1 · Docker Compose infra
-- [~] A2 · Spring Boot skeleton + health (in progress)
+- [x] A2 · Spring Boot skeleton + health
 - [x] A3 · FastAPI worker skeleton + health + pre-warm
-- [ ] A4 · Postgres schema + migrations
+- [~] A4 · Postgres schema + migrations (in progress)
 - [ ] B1 · Queue topology
 - [ ] B2 · Java publisher + result listener (idempotent)
 - [ ] B3 · Python consumer + retry/DLQ
