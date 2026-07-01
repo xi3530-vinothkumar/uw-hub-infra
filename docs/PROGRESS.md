@@ -4,7 +4,7 @@ Living status of the Kanban backlog (`KANBAN.md`). Check the box when a ticket i
 (AC met + tests green + committed). Add a dated one-line note for anything learned or any
 follow-up ticket discovered. Update this in the same change that completes a ticket.
 
-_Last updated: 2026-07-01_ — F1+F2+F3+F4 done: full orchestration state machine, express path, watchdog, EventLogger constants. 164 tests green.
+_Last updated: 2026-07-01_ — G2+G3+E3 done: profile override, decision versioning on override, approve, gated export. 202 tests green.
 
 ## Sprint 1 — Walking skeleton (async extraction end-to-end)
 - [x] A1 · Docker Compose infra
@@ -22,7 +22,7 @@ _Last updated: 2026-07-01_ — F1+F2+F3+F4 done: full orchestration state machin
 - [x] D3 · Mocked hurricane + wildfire
 - [x] E1 · Deterministic scoring engine
 - [x] E2 · Gates
-- [ ] E3 · Decision versioning + re-score
+- [x] E3 · Decision versioning + re-score
 - [ ] C2 · Vision analysis
 
 ## Sprint 3 — Orchestration + API
@@ -30,9 +30,9 @@ _Last updated: 2026-07-01_ — F1+F2+F3+F4 done: full orchestration state machin
 - [x] F2 · /evaluate express path
 - [x] F3 · Activity-based watchdog
 - [x] F4 · Event logging across pipeline
-- [~] G1 · Submission + stepwise endpoints
-- [ ] G2 · Profile override (PATCH)
-- [ ] G3 · Approve + export (gated)
+- [x] G1 · Submission + stepwise endpoints
+- [x] G2 · Profile override (PATCH)
+- [x] G3 · Approve + export (gated)
 - [ ] C3 · Narrative generation
 
 ## Sprint 4 — Frontend + demo
@@ -44,6 +44,8 @@ _Last updated: 2026-07-01_ — F1+F2+F3+F4 done: full orchestration state machin
 - [ ] I2 · Seed script + demo runbook
 
 ## Notes / learnings
+- 2026-07-01 G1: SubmissionController (@RestController /api/v1/submissions) with all stepwise endpoints: POST / (201), POST /{id}/extract (202), POST /{id}/evaluate (202), PATCH /{id}/profile (200), POST /{id}/enrich (202), POST /{id}/score (202), GET /{id} (200), GET /{id}/events (200), POST /{id}/decision/approve (200), POST /{id}/export (200/409). SubmissionService interface expanded (create, startExtraction, evaluateExpress, startEnrichment, startScoring, getDetails, getEvents) + SubmissionServiceImpl. DTOs: CreateSubmissionRequest, SubmissionResponse, CopeProfileDTO, DecisionDTO, AuditEntryResponseDTO, EventLogDTO, ProfileOverrideRequest, ApproveRequest. SubmissionNotFoundException (→ 404). GlobalExceptionHandler (404/409/400/bean-validation). 22 new @WebMvcTest controller tests; 202 total green.
+- 2026-07-01 G2+G3+E3: ProfileOverrideService: updates CopeProfile.value + overriddenByUser=true, logs FIELD_OVERRIDDEN_BY_USER; E3: if a current decision exists, flips is_current=false (decision superseded), logs DECISION_SUPERSEDED_BY_OVERRIDE, reverts submission to REVIEWED for re-score. ApprovalService: sets reviewStatus=HUMAN_APPROVED + approvedBy + approvedAt, advances submission to APPROVED, logs DECISION_APPROVED; idempotent on double-approve. ExportService: gated on HUMAN_APPROVED (throws IllegalStateException("NOT_APPROVED…") → 409 via GlobalExceptionHandler); assembles full export map (submission, copeProfile, perils, decision+auditTrail, events). SubmissionController already existed from G1 with PATCH /profile, POST /decision/approve, POST /export stubs wired to the new services. DECISION_SUPERSEDED_BY_OVERRIDE constant added to EventLogger. 16 new tests; 202 total green.
 - 2026-07-01 F1+F2+F3+F4: Full orchestration state machine implemented. OrchestrationServiceImpl now handles EXTRACT/VISION/NARRATIVE results, multi-photo join barrier (DB-derived PENDING count — idempotent + crash-safe), enrichment delegation to EnrichmentService.enrich() with thenRun/exceptionally chain, runScoring (decision v+1, is_current flip, audit entries, exposure flags JSON), narrative publishing. F2 express path: evaluateExpress sets expressPath=true on Submission, handleExtractionResult auto-calls skipReview which transitions EXTRACTED→REVIEWED and kicks off vision or enrichment. F3 Watchdog: @Scheduled(fixedDelay=300_000) scans non-terminal subs with last_activity_at > 15 min stale, republishPendingTask dispatches by status. F4 EventLogger: 18 canonical event type constants (SUBMISSION_CREATED, EXTRACTION_PUBLISHED, ..., FAILED_SCORING). V2 migration adds express_path BOOLEAN column. @EnableScheduling added to CopilotApplication. AuditEntryRepository created. OrchestrationService interface expanded with startExtraction/evaluateExpress/republishPendingTask. 42 new tests; 164 total green.
 - 2026-07-01 E1+E2: RulesEngine implemented as pure side-effect-free component. Additive weighted scoring across COPE completeness, occupancy, construction, age, TIV, peril exposure, photo quality, confidence. Three gates: severe-peril (any exposure score >= 85 → DECLINE), low-confidence (< 0.55 → REFER), missing-TIV (null → REFER). No-photo exclusion: vision factor zeroed. All 3 HLD §12 worked examples pass (Accept/Refer/Decline). Determinism test + gate tests green. ScoringConfig holds all weights/thresholds/constants. 130+ Java tests all green.
 - 2026-07-01 D2+D3: PerilSource port (interface) created. FemaFloodAdapter: @CircuitBreaker(name="fema"), queries NFHL MapServer layer 28, maps FLD_ZONE to severe(85)/moderate(65)/low(20), fallback returns unavailable row. UsgsSeismicAdapter: @CircuitBreaker(name="usgs"), queries USGS ASCE7-22, maps Sds >=1.5/0.75/0.25 to severe(85)/moderate(60)/low(35)/minimal(10). MockHurricaneAdapter: state-token keyword match (FL/TX/LA/NC/SC/GA -> severe 80, else low 25). MockWildfireAdapter: state-token keyword match (CA/OR/WA/CO/AZ/NM/NV -> moderate 75, else low 15). EnrichmentService: geocodes, fans out to all PerilSource beans on enrichmentExecutor (3-thread pool), catches per-source exceptions as unavailable rows, persists via PerilExposureRepository, advances submission to ENRICHED. PerilExposureRepository with findBySubmissionId (JPQL) and findBySubmission_Id/findBySubmission_IdOrderByScoreDesc (Spring Data). EnrichmentConfig @Bean enrichmentExecutor. 37 new tests; 106 total green.
