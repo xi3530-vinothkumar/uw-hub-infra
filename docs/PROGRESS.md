@@ -10,8 +10,8 @@ _Last updated: 2026-07-01_ — A3 done: real /health (Ollama reachability + per-
 - [x] A1 · Docker Compose infra
 - [x] A2 · Spring Boot skeleton + health
 - [x] A3 · FastAPI worker skeleton + health + pre-warm
-- [~] A4 · Postgres schema + migrations (in progress)
-- [ ] B1 · Queue topology
+- [x] A4 · Postgres schema + migrations
+- [~] B1 · Queue topology
 - [ ] B2 · Java publisher + result listener (idempotent)
 - [ ] B3 · Python consumer + retry/DLQ
 - [ ] C1 · Extraction (text → COPE)

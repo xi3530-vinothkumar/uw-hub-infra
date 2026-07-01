@@ -78,6 +78,8 @@ recommendation come from a deterministic rules engine — never from the AI dire
                      └─────────────────────────┘
 ```
 
+See also: [Sequence Diagrams](SEQUENCE_DIAGRAMS.md) — detailed Mermaid flows for express path, stepwise, failure recovery, and override.
+
 ---
 
 ## 4. Component Responsibilities

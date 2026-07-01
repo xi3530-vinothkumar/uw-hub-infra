@@ -1,5 +1,5 @@
 # Working On
-Current tickets: A4 (Postgres schema + Flyway migrations) + B1 (messaging topology tests)
+Current: B1+B2+B3 (messaging backbone)
 Status: In Progress
 Started: 2026-07-01
 Next: B2 (Java publisher + result listener), B3 (Python consumer + retry/DLQ)
