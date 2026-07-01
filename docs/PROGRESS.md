@@ -4,7 +4,7 @@ Living status of the Kanban backlog (`KANBAN.md`). Check the box when a ticket i
 (AC met + tests green + committed). Add a dated one-line note for anything learned or any
 follow-up ticket discovered. Update this in the same change that completes a ticket.
 
-_Last updated: 2026-07-01_ — G1+G2+G3+E3 done: submission endpoints, profile override, decision versioning, approve, gated export. C2+C3 in-progress. 202 tests green.
+_Last updated: 2026-07-01_ — C2+C3 done: vision handler + narrative with template fallback. H1 in-progress (frontend intake + stepper).
 
 ## Sprint 1 — Walking skeleton (async extraction end-to-end)
 - [x] A1 · Docker Compose infra
@@ -23,7 +23,7 @@ _Last updated: 2026-07-01_ — G1+G2+G3+E3 done: submission endpoints, profile o
 - [x] E1 · Deterministic scoring engine
 - [x] E2 · Gates
 - [x] E3 · Decision versioning + re-score
-- [~] C2 · Vision analysis
+- [x] C2 · Vision analysis
 
 ## Sprint 3 — Orchestration + API
 - [x] F1 · State machine + multi-photo join
@@ -33,10 +33,10 @@ _Last updated: 2026-07-01_ — G1+G2+G3+E3 done: submission endpoints, profile o
 - [x] G1 · Submission + stepwise endpoints
 - [x] G2 · Profile override (PATCH)
 - [x] G3 · Approve + export (gated)
-- [~] C3 · Narrative generation
+- [x] C3 · Narrative generation
 
 ## Sprint 4 — Frontend + demo
-- [ ] H1 · Intake + stepper
+- [~] H1 · Intake + stepper
 - [ ] H2 · COPE review screen
 - [ ] H3 · Photos, peril cards, risk dossier
 - [ ] H4 · Event timeline + approve/export controls
