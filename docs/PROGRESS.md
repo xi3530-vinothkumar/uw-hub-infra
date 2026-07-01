@@ -4,7 +4,7 @@ Living status of the Kanban backlog (`KANBAN.md`). Check the box when a ticket i
 (AC met + tests green + committed). Add a dated one-line note for anything learned or any
 follow-up ticket discovered. Update this in the same change that completes a ticket.
 
-_Last updated: 2026-07-01_ — A3 done: real /health (Ollama reachability + per-model availability), startup pre-warm via lifespan, consumer.connect() with prefetch=1, llm_adapter complete/vision/complete_json/warm_up implemented.
+_Last updated: 2026-07-01_ — B3 done: full Python consumer (prefetch=1, ack-after-success, app-level retry/DLQ topology), consumer task started in lifespan, 17 new unit tests all green (23 total).
 
 ## Sprint 1 — Walking skeleton (async extraction end-to-end)
 - [x] A1 · Docker Compose infra
@@ -13,7 +13,7 @@ _Last updated: 2026-07-01_ — A3 done: real /health (Ollama reachability + per-
 - [x] A4 · Postgres schema + migrations
 - [~] B1 · Queue topology
 - [ ] B2 · Java publisher + result listener (idempotent)
-- [ ] B3 · Python consumer + retry/DLQ
+- [x] B3 · Python consumer + retry/DLQ
 - [ ] C1 · Extraction (text → COPE)
 
 ## Sprint 2 — Decision core (real perils + a scored decision)
@@ -45,3 +45,4 @@ _Last updated: 2026-07-01_ — A3 done: real /health (Ollama reachability + per-
 
 ## Notes / learnings
 - 2026-07-01 A3: Added pytest test suite (tests/test_health.py + tests/test_llm_adapter.py) + requirements-test.txt; all 6 tests green. FastAPI lifespan replaces deprecated @app.on_event.
+- 2026-07-01 B3: Full consumer implemented: prefetch=1, ack-after-success, retryCount < MAX -> uw.retry (TTL), retryCount >= MAX -> FAILURE result + uw.dlx. Consumer task started in FastAPI lifespan. 17 new unit tests; 23 total green.
