@@ -4,7 +4,7 @@ Living status of the Kanban backlog (`KANBAN.md`). Check the box when a ticket i
 (AC met + tests green + committed). Add a dated one-line note for anything learned or any
 follow-up ticket discovered. Update this in the same change that completes a ticket.
 
-_Last updated: 2026-07-02_ — UI/UX audit complete. Two gaps found and fixed: structured ExposureFlag (backend) + severity-coloured chips (frontend); EXTRACTED status label → "Draft Review Pending".
+_Last updated: 2026-07-02_ — UI/UX audit complete. Five glitches found and fixed: structured ExposureFlag (backend) + severity-coloured chips (frontend); EXTRACTED label → "Draft Review Pending"; "Back to pipeline" redirect loop (skipRedirect nav-state); APPROVED/EXPORTED stepper shows all steps done; band normalization (title-case vs uppercase from backend); confirmCOPEReview API wired; peril label caps cleanup.
 
 ## Sprint 1 — Walking skeleton (async extraction end-to-end)
 - [x] A1 · Docker Compose infra
