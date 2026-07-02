@@ -15,7 +15,12 @@ __pycache__/
 !/data/photos/.gitkeep
 # OS
 .DS_Store
-# sub-repo roots excluded from hub repo
+# javac temp files
+javac.*.args
+# service repos (each has its own remote)
 backend/
-ai-worker/
 frontend/
+ai-worker/
+# e2e + test infra (uw-hub-e2e)
+e2e/
+mock-ai-worker/
