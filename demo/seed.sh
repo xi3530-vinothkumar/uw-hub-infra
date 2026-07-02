@@ -54,7 +54,7 @@ for f in "$SUBMISSIONS_DIR"/*.json; do
     -H "Content-Type: application/json" \
     -d "$CREATE_BODY")
   HTTP_CODE=$(echo "$RESPONSE" | tail -1)
-  BODY=$(echo "$RESPONSE" | head -n -1)
+  BODY=$(echo "$RESPONSE" | sed '$d')
 
   if [ "$HTTP_CODE" != "201" ]; then
     err "  Failed to create submission (HTTP $HTTP_CODE): $BODY"
