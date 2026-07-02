@@ -21,6 +21,5 @@ javac.*.args
 backend/
 frontend/
 ai-worker/
-# e2e + test infra (uw-hub-e2e)
+# e2e repo (has its own remote)
 e2e/
-mock-ai-worker/
