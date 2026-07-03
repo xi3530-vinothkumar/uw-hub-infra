@@ -15,6 +15,8 @@ from aio_pika import IncomingMessage, Message, DeliveryMode
 from aio_pika.abc import AbstractRobustConnection, AbstractChannel, AbstractExchange
 
 from . import config
+from . import failure_flags
+from . import scenarios
 from .schemas import TaskMessage, ResultMessage
 from .handlers import extract, vision, narrative
 
@@ -76,14 +78,18 @@ async def _publish_dlq(channel: AbstractChannel, task: TaskMessage) -> None:
 
 
 async def _dispatch(task: TaskMessage) -> dict:
-    """Dispatch a task to the appropriate handler (handlers are synchronous)."""
+    """Dispatch a task to the appropriate handler (handlers are synchronous).
+
+    submissionId is passed to VISION and NARRATIVE handlers so they can look up
+    failure flags recorded during EXTRACT (the text-carrying task).
+    """
     task_type = task.taskType.upper()
     if task_type == "EXTRACT":
         return await asyncio.to_thread(extract.handle, task.payload)
     elif task_type == "VISION":
-        return await asyncio.to_thread(vision.handle, task.payload)
+        return await asyncio.to_thread(vision.handle, task.payload, str(task.submissionId))
     elif task_type == "NARRATIVE":
-        return await asyncio.to_thread(narrative.handle, task.payload)
+        return await asyncio.to_thread(narrative.handle, task.payload, str(task.submissionId))
     raise ValueError(f"Unknown taskType: {task.taskType!r}")
 
 
@@ -103,6 +109,18 @@ async def _on_message(message: IncomingMessage, channel: AbstractChannel) -> Non
             task.submissionId,
             task.retryCount,
         )
+
+        # On EXTRACT tasks the payload carries the full submission text, so we
+        # can check failure-trigger keywords and record flags for this submission.
+        # VISION/NARRATIVE tasks do not carry the text, so the registry bridges
+        # the gap for those downstream handlers. (TEST-ONLY ephemeral memory.)
+        if task.taskType.upper() == "EXTRACT":
+            text = task.payload.get("submissionText", "") or ""
+            failure_flags.record_flags(
+                task.submissionId,
+                fail_vision=scenarios.should_fail_vision(text),
+                fail_narrative=scenarios.should_fail_narrative(text),
+            )
 
         try:
             result_payload = await _dispatch(task)

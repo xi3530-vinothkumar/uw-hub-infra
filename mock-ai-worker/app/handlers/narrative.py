@@ -1,14 +1,21 @@
 """Mock narrative handler.
 
-Narrative is cosmetic (CLAUDE.md invariant #4): if generation fails, we fall
-back to a deterministic template and never raise. Optionally, when
-USE_REAL_LLM is set and an Anthropic API key is present, we call the real
-Claude API (Fable 5, falling back to Opus 4.8) for a nicer narrative — but any
-failure there is swallowed and the template is used instead.
+Narrative is cosmetic (CLAUDE.md invariant #4): if generation fails on the
+Java side, it substitutes a template and still reaches DECIDED. In the mock
+worker we honour the FAIL NARRATIVE keyword trigger by raising a ValueError so
+the consumer routes the task through the retry topology (retries × 3, then
+DLQ + FAILURE ResultMessage). The Java orchestrator detects the FAILURE result
+for a NARRATIVE task, substitutes its own template narrative, and advances the
+submission to DECIDED — never FAILED_AI. Optionally, when USE_REAL_LLM is set
+and an Anthropic API key is present, we call the real Claude API (Fable 5,
+falling back to Opus 4.8) for a nicer narrative; any failure there is also
+re-raised so the mock consistently exercises the narrative-failure path when
+triggered, or swallowed if the trigger is inactive.
 """
 import logging
 
 from .. import config
+from .. import failure_flags
 
 logger = logging.getLogger(__name__)
 
@@ -48,10 +55,19 @@ def _try_real_llm(prompt: str, model: str) -> str:
     raise ValueError("No text block in LLM response")
 
 
-def handle(payload: dict) -> dict:
-    """Produce a narrative + pricing guidance. Never raises (invariant #4)."""
+def handle(payload: dict, submission_id: str = "") -> dict:
+    """Produce a narrative + pricing guidance.
+
+    Raises ValueError when the FAIL NARRATIVE trigger is active for this
+    submission (test-only path). The Java orchestrator catches the resulting
+    FAILURE ResultMessage and substitutes a template narrative so the
+    submission reaches DECIDED rather than FAILED_AI (invariant #4).
+    """
     score = payload.get("compositeScore", payload.get("score", 0))
     recommendation = payload.get("recommendation", "REFER")
+
+    if submission_id and failure_flags.should_fail_narrative(submission_id):
+        raise ValueError("Mock narrative failure (FAIL NARRATIVE keyword present)")
 
     if config.USE_REAL_LLM and config.ANTHROPIC_API_KEY:
         prompt = (
