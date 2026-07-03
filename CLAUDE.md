@@ -19,7 +19,7 @@ Accept/Refer/Decline recommendation with a full audit trail. AI never makes the 
 - **Python / FastAPI** — stateless **AI worker**: all Ollama calls (extraction, vision,
   narrative). No persistence, no decisions, no external peril calls.
 - **RabbitMQ** — async task pipeline (task/retry-TTL/result/DLQ queues).
-- **Ollama (local)** — `llama3.1:8b` (text) + `llama3.2-vision:11b` (vision).
+- **Ollama (local)** — `llama3.1:8b` (text) + `qwen2.5vl:7b` (vision).
 - **PostgreSQL** — all structured state.
 
 Full design: `@docs/HLD.md`. Implementation detail: `@docs/LLD.md`.
@@ -76,7 +76,7 @@ npm install && npm run dev
 ### Ollama models (pull once)
 ```
 ollama pull llama3.1:8b
-ollama pull llama3.2-vision:11b
+ollama pull qwen2.5vl:7b
 ```
 
 ## Codebase map

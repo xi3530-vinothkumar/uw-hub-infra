@@ -250,5 +250,5 @@ rules engine runs without the LLM; only the narrative degrades.
 ## 9. Config / constants (centralized)
 - Java: `ScoringConstants`, `MessagingConfig` (queue names/TTLs), `EnrichmentConfig`
   (endpoints, timeouts, breaker settings, Nominatim UA), thresholds (`MIN_FIELD_CONFIDENCE=0.60`).
-- Python: env — `OLLAMA_HOST`, `MODEL_TEXT=llama3.1:8b`, `MODEL_VISION=llama3.2-vision:11b`,
+- Python: env — `OLLAMA_HOST`, `MODEL_TEXT=llama3.1:8b`, `MODEL_VISION=qwen2.5vl:7b`,
   `MAX_RETRIES=3`, queue names.

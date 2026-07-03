@@ -10,7 +10,7 @@ Order matters — infra and models must be up before the services.
 1. **Infra (Docker):** `docker compose up -d postgres rabbitmq` (and `minio` if enabled).
    RabbitMQ management UI at http://localhost:15672.
 2. **Ollama + models (once):**
-   `ollama pull llama3.1:8b` and `ollama pull llama3.2-vision:11b`
+   `ollama pull llama3.1:8b` and `ollama pull qwen2.5vl:7b`
    (fallback: `ollama pull llava:7b`). Ensure `ollama serve` is running (http://localhost:11434).
 3. **Python AI worker:** create venv, `pip install -r requirements.txt`, then start it.
    It connects to RabbitMQ and pre-warms both models. Check `GET /health` reports Ollama up.

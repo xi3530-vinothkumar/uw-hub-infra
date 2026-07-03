@@ -48,7 +48,7 @@ sequenceDiagram
         Java->>MQ: publish VISION task (queue.task.vision)
         Java->>DB: log event VISION_PUBLISHED
         MQ->>PY: deliver VISION task (prefetch=1)
-        PY->>OL: call llama3.2-vision:11b (vision prompt)
+        PY->>OL: call qwen2.5vl:7b (vision prompt)
         OL-->>PY: findings + condition_score JSON
         PY->>MQ: publish result → queue.result (ack after publish)
         MQ->>Java: deliver VISION result
@@ -152,7 +152,7 @@ sequenceDiagram
         Java->>MQ: publish VISION task (queue.task.vision)
         Java->>DB: log VISION_PUBLISHED
         MQ->>PY: deliver VISION task (prefetch=1)
-        PY->>OL: call llama3.2-vision:11b (vision prompt)
+        PY->>OL: call qwen2.5vl:7b (vision prompt)
         OL-->>PY: findings + condition_score JSON
         PY->>MQ: publish result → queue.result (ack after publish)
         MQ->>Java: deliver VISION result

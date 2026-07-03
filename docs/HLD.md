@@ -228,7 +228,7 @@ so concurrency would thrash models; one-in-flight also makes crash recovery triv
 **Result message:** `{ taskId, submissionId, taskType, status(SUCCESS|FAILURE), payload, errorMessage }`
 
 **Routing:** EXTRACT/NARRATIVE → `queue.task.text` (llama3.1:8b); VISION →
-`queue.task.vision` (llama3.2-vision:11b); results → `queue.result`; retries →
+`queue.task.vision` (qwen2.5vl:7b); results → `queue.result`; retries →
 `queue.retry.*` (TTL); exhausted → `queue.dlq.*`.
 
 **Retry topology (bounded, corrected):** a plain nack-requeue loops forever, so on
@@ -531,7 +531,7 @@ encryption + retention. Labelled production roadmap, not demo gaps.
 
 **Infra:** Ollama; PostgreSQL; RabbitMQ; JDK 17+; Python 3.11+; Node.js+npm; Docker
 (recommended); MinIO (optional, production).
-**Models (Ollama):** `llama3.1:8b`, `llama3.2-vision:11b` (fallback `llava:7b`); ~12–13GB
+**Models (Ollama):** `llama3.1:8b`, `qwen2.5vl:7b` (fallback `llava:7b`; `llama3.2-vision:11b` no longer loads — Ollama dropped the mllama architecture); ~12–13GB
 combined at Q4; feasible on M3 Pro/18GB.
 **Java:** `spring-boot-starter-web`, `-data-jpa` + `postgresql`, `-validation`,
 `-amqp`, `WebClient`/`RestClient`, `resilience4j-spring-boot3`, `springdoc-openapi`

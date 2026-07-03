@@ -26,7 +26,7 @@ Covers three risk profiles: **Accept**, **Refer**, **Decline**.
 
 ```bash
 ollama pull llama3.1:8b
-ollama pull llama3.2-vision:11b
+ollama pull qwen2.5vl:7b
 ```
 
 Both must show `success` before starting the AI worker.  Verify:
