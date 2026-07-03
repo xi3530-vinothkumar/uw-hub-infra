@@ -100,7 +100,7 @@ echo ""
 info "Watch all statuses:"
 echo ""
 for i in "${!SUBMISSION_IDS[@]}"; do
-  echo "  curl -s $API/submissions/${SUBMISSION_IDS[$i]} | jq '{status: .status, band: .currentDecision.band}'"
+  echo "  curl -s $API/submissions/${SUBMISSION_IDS[$i]} | jq '{status: .status, band: .currentDecision.recommendation}'"
 done
 echo ""
 info "Frontend: http://localhost:5173"
